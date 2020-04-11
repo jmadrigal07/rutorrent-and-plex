@@ -1,3 +1,5 @@
 .env
 rutorrent/config/*
 rutorrent/downloads/*
+plex/library/Library/*
+*.log

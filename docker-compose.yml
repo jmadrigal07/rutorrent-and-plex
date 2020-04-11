@@ -4,8 +4,8 @@ services:
     image: linuxserver/rutorrent
     container_name: rutorrent
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
     volumes:
       - ./rutorrent/config:/config
       - ./rutorrent/downloads:/downloads
@@ -14,4 +14,20 @@ services:
       - 5000:5000
       - 51413:51413
       - 6881:6881/udp
+    restart: unless-stopped
+
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    environment:
+      - TZ=${TZ}
+      - PLEX_CLAIM=${PLEX_CLAIM}
+    expose:
+      - 32400
+      - 33400
+    volumes:
+      - ./plex/library:/config
+      - ./plex/transcode:/transcode
+      - ${PATH_MEDIA}:/media
+    network_mode: "host"
     restart: unless-stopped
