@@ -1,5 +1,27 @@
 version: "2"
 services:
+
+  nginx:
+    image: nginx:1.15-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    links:
+      - "rutorrent"
+      - "plex"
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+
   rutorrent:
     image: linuxserver/rutorrent
     container_name: rutorrent
@@ -10,7 +32,7 @@ services:
       - ./rutorrent/config:/config
       - ./rutorrent/downloads:/downloads
     ports:
-      - 80:80
+      - 8080:80
       - 5000:5000
       - 51413:51413
       - 6881:6881/udp
@@ -29,5 +51,4 @@ services:
       - ./plex/library:/config
       - ./plex/transcode:/transcode
       - ${PATH_MEDIA}:/media
-    network_mode: "host"
     restart: unless-stopped

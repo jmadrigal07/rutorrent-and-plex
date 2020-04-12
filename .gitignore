@@ -2,4 +2,6 @@
 rutorrent/config/*
 rutorrent/downloads/*
 plex/library/Library/*
+plex/transcode/Transcode/*
+data/certbot/conf/*
 *.log
